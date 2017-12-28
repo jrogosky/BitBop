@@ -93,8 +93,30 @@ def react():
                 if BA == False:
                     break
         Finish = True       
-       
-            
+#point the microbit in the listed direction   
+def CompassPoint
+    actions=["N","S","E","W"]
+    instructions("TURN THE MICROBIT TOWARDS THE DIRECTION SHOWN, PRESS A WHEN READY")
+    Finish = False
+    while not Finish:
+        inst = []
+        for i in range(0,6):
+            inst.append(random.randint(0,3))
+        for i in inst:
+            if (i == "N"):
+                while (not compass.heading() == 0):
+                    display.show("N",100, wait=Fasle,loop=False,clear=False)
+            if (i == "E"):
+                while (not compass.heading() == 90):
+                    display.show("E",100, wait=Fasle,loop=False,clear=False)
+            if (i == "S"):
+                while (not compass.heading() == 180):
+                    display.show("S",100, wait=Fasle,loop=False,clear=False)
+            if (i == "W"):
+                while (not compass.heading() == 270):
+                    display.show("W",100, wait=Fasle,loop=False,clear=False)
+
+#Tracks what game is the current one.           
 game = 0
 instructions("ARE YOU READY TO PLAY, PRESS A")
 while game < 6:  
