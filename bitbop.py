@@ -55,47 +55,34 @@ def react():
     actions=['A','FA','BA','B']
     instructions("FOLLOW THE INSTRUCTIONS, PRESS A WHEN READY")
     Finish = False
-    while not Finish:
-        inst = []
-        for i in range(0,6):
-            inst.append(random.randint(0,3))
+    inst = []
+    for i in range(0,6):
+        inst.append(random.randint(0,3))
  
-        for i in inst:
-            print(actions[i])
-            if actions[i] == 'A':
-                display.show("A",1000, wait=True,loop=False,clear=False)
-                sleep(1000)
-                if not button_a.was_pressed():
+    for i in inst:
+        print(actions[i])
+        if actions[i] == 'A':
+            display.show("A",1000, wait=False,loop=False,clear=False)
+            while True:
+                if button_a.was_pressed():
                     break
-            if actions[i] == 'B':
-                display.show("B",1000, wait=True,loop=False,clear=False)
-                sleep(1000)
-                if not button_b.was_pressed():
+        if actions[i] == 'B':
+            display.show("B",1000, wait=True,loop=False,clear=False)
+            while True:
+                if button_b.was_pressed():
                     break
-            if actions[i] == 'FA':
-                FA = False
-                display.show(Image.ARROW_N)
-                start = running_time()
-                sleep(1000)
-                while (running_time() - start) < 1000:
-                    if accelerometer.get_y() > 500:
-                        FA = True
-                if FA == False:
-                    break
-            if actions[i] == 'BA':
-                BA = False
-                display.show(Image.ARROW_S)
-                start = running_time()
-                sleep(1000)
-                while (running_time() - start) < 1000:
-                    if accelerometer.get_y() > -500:
-                        BA = True
-                if BA == False:
-                    break
-        Finish = True       
+        if actions[i] == 'FA':
+            display.show(Image.ARROW_N)
+            while (accelerometer.get_y() < 500):
+                sleep(1)
+        if actions[i] == 'BA':
+            display.show(Image.ARROW_S)
+            while accelerometer.get_y() > -500:
+                sleep(1)
+
 #point the microbit in the listed direction   
-def CompassPoint
-    actions=["N","S","E","W"]
+def CompassPoint():
+    directions=["N","S","E","W"]
     instructions("TURN THE MICROBIT TOWARDS THE DIRECTION SHOWN, PRESS A WHEN READY")
     Finish = False
     while not Finish:
@@ -103,21 +90,35 @@ def CompassPoint
         for i in range(0,6):
             inst.append(random.randint(0,3))
         for i in inst:
-            if (i == "N"):
+            if (directions[i] == "N"):
                 while (not compass.heading() == 0):
-                    display.show("N",100, wait=Fasle,loop=False,clear=False)
-            if (i == "E"):
+                    print(str(compass.heading()))
+                    display.show("N",100, wait=False,loop=False,clear=False)
+            if (directions[i] == "E"):
                 while (not compass.heading() == 90):
-                    display.show("E",100, wait=Fasle,loop=False,clear=False)
-            if (i == "S"):
+                    print(str(compass.heading()))
+                    display.show("E",100, wait=False,loop=False,clear=False)
+            if (directions[i] == "S"):
                 while (not compass.heading() == 180):
-                    display.show("S",100, wait=Fasle,loop=False,clear=False)
-            if (i == "W"):
+                    print(str(compass.heading()))
+                    display.show("S",100, wait=False,loop=False,clear=False)
+            if (directions[i] == "W"):
                 while (not compass.heading() == 270):
-                    display.show("W",100, wait=Fasle,loop=False,clear=False)
-
+                    print(str(compass.heading()))
+                    display.show("W",100, wait=False,loop=False,clear=False)
+#Starts at random number, press button A to go up, B to go down until you find the temp
+def findTemp():
+    start = random.randint(20,85)
+    currTemp = round(temperature() * 1.8 + 32)
+    currTempStr = str(currTemp)
+    print(str(currTemp) + "," + str(start))
+    
+    display.scroll("Curr Temp is: " + currTempStr, delay=100, wait=True, loop=False)
+    
+    
 #Tracks what game is the current one.           
 game = 0
+#scrolls text
 instructions("ARE YOU READY TO PLAY, PRESS A")
 while game < 6:  
     if game == 0:
@@ -132,4 +133,9 @@ while game < 6:
        react()
        GoodJob()
        game = 6
+#Compass is too unreliable, will need to replace
+    if game == 3:
+       CompassPoint()
+       GoodJob()
+       game = 6   
 display.scroll("Game Over", delay=175, wait=True, loop=True)
